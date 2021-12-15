@@ -6,7 +6,11 @@
 #include <errno.h>
 #include <stdlib.h>
 
-
+typedef struct BUFFER_S
+{
+	unsigned char buff[BUF_SIZE];
+	int i;
+} BUFF_T;
 
 /**
  * struct stack_s - doubly linked list representation of a stack (or queue)
