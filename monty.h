@@ -1,11 +1,32 @@
 #ifndef MONTY_H
 #define MONTY_H
 
+/*
+ *Built-in Libraries
+ */
 #include <stdio.h>
 #include <stdarg.h>
 #include <errno.h>
 #include <stdlib.h>
+#include <readline/readline.h>
+#include <readline/history.h>
 
+/*
+ * Custom Functions
+ */
+		/*
+		 * pall.c
+		 */
+
+int *open_file(char *file);
+
+
+
+/**
+ * struct BUFFER_S
+ * @i: counter
+ * @buff: stores the sizeof buff
+ */
 typedef struct BUFFER_S
 {
 	unsigned char buff[BUFSIZ];
@@ -43,10 +64,5 @@ typedef struct instruction_s
         void (*f)(stack_t **stack, unsigned int line_number);
 } instruction_t;
 
-typedef struct pall_opt_s
-{
-        char *opcode;
-        void (*f)(stack_t **stack, unsigned int line_number);
-} pall_opt_t;
 
 #endif

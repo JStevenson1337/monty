@@ -7,7 +7,7 @@
  */
 int main(int argc, char **argv)
 {
-	int *file;
+	int *file();
 	if (argc != 2)
 	{
 		fprintf(stderr, "USAGE: push integer\n");
