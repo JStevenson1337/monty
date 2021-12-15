@@ -39,4 +39,19 @@ typedef struct instruction_s
         void (*f)(stack_t **stack, unsigned int line_number);
 } instruction_t;
 
+pall_opt_t *open_file(char *file);
+
+typedef struct stack_s stack_t
+{
+        int n;
+        struct stack_s *prev;
+        struct stack_s *next;
+} stack_t;
+
+typedef struct pall_opt_s
+{
+        char *opcode;
+        void (*f)(stack_t **stack, unsigned int line_number);
+} pall_opt_t;
+
 #endif
