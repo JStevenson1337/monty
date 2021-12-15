@@ -8,7 +8,7 @@
 
 typedef struct BUFFER_S
 {
-	unsigned char buff[BUF_SIZE];
+	unsigned char buff[BUFSIZ];
 	int i;
 } BUFF_T;
 
@@ -42,15 +42,6 @@ typedef struct instruction_s
         char *opcode;
         void (*f)(stack_t **stack, unsigned int line_number);
 } instruction_t;
-
-pall_opt_t *open_file(char *file);
-
-typedef struct stack_s stack_t
-{
-        int n;
-        struct stack_s *prev;
-        struct stack_s *next;
-} stack_t;
 
 typedef struct pall_opt_s
 {

@@ -7,12 +7,14 @@
  */
 int main(int argc, char **argv)
 {
+	int *file;
 	if (argc != 2)
 	{
 		fprintf(stderr, "USAGE: push integer\n");
 		exit(EXIT_FAILURE);
 	}
-	if (open_file(argv[1]) == -1)
+	if (*argv[1] == -1)
 		exit(EXIT_FAILURE);
-	return (0);
+	return (1);
+}
 
