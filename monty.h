@@ -15,10 +15,19 @@
  * Custom Functions
  */
 		/*
-		 * pall.c
+		 * open_f.c
 		 */
 
 int *open_file(char *file);
+
+		/*
+		 * stack_f.c
+		 */
+
+// stack_t *add_node_end(stack_t **head, int n);
+// stack_t *add_node_start(stack_t **head, int n);
+// stack_t *add_node_at(stack_t **head, unsigned int n, int value);
+// stack_t *add_node_at_end(stack_t **head, unsigned int n, int value);
 
 
 
