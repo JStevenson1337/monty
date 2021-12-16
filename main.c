@@ -5,55 +5,76 @@
  * @argv: arguments
  * Return: 0
  */
-int main(int argc, char **argv)
+int main(char argc, char **argv)
 {
 	int i = 0;
+	int *stack = NULL;
+	FILE *fp;
+	char *line = NULL;
+	size_t len = 0;
+	ssize_t read;
+	unsigned int line_number = 0;
 
-	char self = *argv[0];
-	const char *file = *argv[1];
-	char line_number = *argv[2];
-
-	FILE *reader = fopen(file, "r");
-	while (reader != NULL)
+	if (argc != 2)
 	{
-		char *line = NULL;
-		size_t len = 0;
-		ssize_t read;
-		read = getline(&line, &len, reader);
+		fprintf(stderr, "USAGE: monty file\n");
+		exit(EXIT_FAILURE);
+	}
+	fp = fopen(argv[1], "r");
+
+	while ((read = getline(&line, &len, fp)) != -1)
+	{
+
+		line_number++;
 		if (line[0] == '#')
-		{
-			free(line);
-			line = NULL;
 			continue;
-		}
 		if (line[0] == '\n')
-		{
-			free(line);
-			line = NULL;
 			continue;
 		}
-		if (line[0] == '\0')
+		printf("%d\t", line_number);
+		printf("%s\n", line);
+		
+		while (*line)
 		{
-			free(line);
-			line = NULL;
-			continue;
-		}
-		printf("%s", line);
-		for (i = 0; line[i] != '\0'; i++)
-		{
-			if (line[i] == ' ')
-			{
-				line[i] = '\0';
-				break;
-			}
+			opcode_lookup(line, &stack, line_number);
+			line++;
 		}
 		free(line);
-		line = NULL;
+		fclose(fp);
+		return (0);
 	}
-	fclose(reader);
-	return (0);
-
+/**
+ * @brief 
+ * 
+ */
+void opcode_lookup(char *line, int **stack, unsigned int line_number)
+{
+	int i = 0;
+	char *opcode[] = {"push", "pall", "pint", "pop", "swap", "add", "nop", "sub", "div", "mul", "mod", "pchar", "pstr"};
+	void (*f[11])(int **stack, unsigned int line_number) = {
+		push,
+		pall,
+		//sub,
+		// div,
+		// mul,
+		// mod,
+		// pchar
+	};
+	for (i = 0; i < '\0'; i++)
+	{
+		if (strncmp(line, opcode[i], strlen(opcode[i])) == 0)
+		{
+			f[i](stack, line_number);
+			break;
+		}
+	}
+	if (i == 11)
+	{
+		fprintf(stderr, "L%d: unknown instruction %s\n", line_number, line);
+		exit(EXIT_FAILURE);
+	}
 }
+
 
 
 

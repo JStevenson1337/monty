@@ -10,6 +10,9 @@
 #include <stdlib.h>
 #include <readline/readline.h>
 #include <readline/history.h>
+#include <sys/types.h>
+#include <unistd.h>
+#include <string.h>
 
 /*
  * Custom Functions
@@ -73,5 +76,8 @@ typedef struct instruction_s
         void (*f)(stack_t **stack, unsigned int line_number);
 } instruction_t;
 
+void opcode_lookup(char *line, int **stack, unsigned int line_number);
+char push(stack_t **head, unsigned int line_number);
+int pall(stack_t **stack, unsigned int line_number);
 
 #endif
