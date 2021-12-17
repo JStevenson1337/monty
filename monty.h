@@ -8,9 +8,42 @@
 #include <stdarg.h>
 #include <errno.h>
 #include <stdlib.h>
+#include <readline/readline.h>
+#include <readline/history.h>
 #include <sys/types.h>
 #include <unistd.h>
 #include <string.h>
+
+/*
+ * Custom Functions
+ */
+		/*
+		 * open_f.c
+		 */
+
+int *open_file(char *file);
+
+		/*
+		 * stack_f.c
+		 */
+
+// stack_t *add_node_end(stack_t **head, int n);
+// stack_t *add_node_start(stack_t **head, int n);
+// stack_t *add_node_at(stack_t **head, unsigned int n, int value);
+// stack_t *add_node_at_end(stack_t **head, unsigned int n, int value);
+
+
+
+/**
+ * struct BUFFER_S
+ * @i: counter
+ * @buff: stores the sizeof buff
+ */
+typedef struct BUFFER_S
+{
+	unsigned char buff[BUFSIZ];
+	int i;
+} BUFF_T;
 
 /**
  * struct stack_s - doubly linked list representation of a stack (or queue)
@@ -28,14 +61,6 @@ typedef struct stack_s
         struct stack_s *next;
 } stack_t;
 
-typedef struct BUFFER_S
-{
-	unsigned char buff[BUFSIZ];
-	int i;
-} BUFF_T;
-
-
-
 
 /**
  * struct instruction_s - opcode and its function
@@ -51,31 +76,8 @@ typedef struct instruction_s
         void (*f)(stack_t **stack, unsigned int line_number);
 } instruction_t;
 
-
-void push(stack_t **stack, unsigned int line_cnt);
-void pall(stack_t **stack, unsigned int line_cnt);
-void pint(stack_t **stack, unsigned int line_cnt);
-void swap(stack_t **stack, unsigned int line_cnt);
-void pop(stack_t **stack, unsigned int line_cnt);
-void nop(stack_t **stack, unsigned int line_cnt);
-
-
-int is_digit(char *string);
-int isnumber(char *str);
-
-stack_t *add_node(stack_t **stack, const int n);
-stack_t *queue_node(stack_t **stack, const int n);
-void free_stack(stack_t *stack);
-size_t print_stack(const stack_t *stack);
-stack_t *add_node_start(stack_t **head, int n);
-stack_t *add_node_end(stack_t **head, int n);
-stack_t *add_node_at(stack_t **head, unsigned int n, int value);
-stack_t *add_node_at_end(stack_t **head, unsigned int n, int value);
-
-
-
-
-// void file_error(char *argv);
-// void error_usage(void);
+void opcode_lookup(char *line, int **stack, unsigned int line_number);
+char push(stack_t **head, unsigned int line_number);
+int pall(stack_t **stack, unsigned int line_number);
 
 #endif

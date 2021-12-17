@@ -1,47 +1,48 @@
 #include "monty.h"
-
-
-
-
 /**
- * main - entry point
- * @argv: list of arguments passed to our program
- * @argc: ammount of args
- *
- * Return: nothing
- */
-int main(int argc, char **argv)
+* main - main function
+* @argc: number of arguments
+* @argv: arguments
+* Return: 0
+*/
+int main(char argc, char **argv)
 {
-
-
-	FILE *file;
-	size_t buf_len = 0;
-	char *buffer = NULL;
-	char *str = NULL;
-	stack_t *stack = NULL;
-	unsigned int line_cnt = 1;
-
-	file = fopen(argv[1], "r");
-
-
-	while (getline(&buffer, &buf_len, file) != -1)
-	{
-		str = strtok(buffer, "\n\t\r");
-		if (str != NULL)
-		{
-			execute_opcode(&stack, str, line_cnt);
-		}
-		line_cnt++;
-	}
-
-	{
-
-		execute_opcode(&stack, str, line_cnt);
-		opcode(&stack, str, line_cnt);
-		line_cnt++;
-	}
-	free(buffer);
-	free_stack(stack);
-	fclose(file);
-	exit(status);
+int i = 0;
+int *stack = NULL;
+FILE *fp;
+char *line = NULL;
+size_t len = 0;
+ssize_t read;
+unsigned int line_number = 0;
+if (argc != 2)
+{
+fprintf(stderr, "USAGE: monty file\n");
+exit(EXIT_FAILURE);
 }
+fp = fopen(argv[1], "r");
+while ((read = getline(&line, &len, fp)) != -1)
+{
+line_number++;
+if (line[0] == '#')
+continue;
+if (line[0] == '\n')
+continue;
+}
+printf("%d\t", line_number);
+printf("%s\n", line);
+while (*line)
+{
+opcode_lookup(line, &stack, line_number);
+line++;
+}
+free(line);
+fclose(fp);
+return (0);
+}
+/*
+*	EXAMPLE:
+*	>>>$ ./a.out hello there
+*	argv[0]: ./a.out
+*	argv[1]: hello
+*	argv[2]: there
+*/
