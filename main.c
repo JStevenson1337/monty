@@ -1,55 +1,64 @@
 #include "monty.h"
+
+int status = 0;
+
+
+
 /**
- * main - main function
- * @argc: number of arguments
- * @argv: arguments
- * Return: 0
+ * main - entry point
+ * @argv: list of arguments passed to our program
+ * @argc: ammount of args
+ *
+ * Return: nothing
  */
-int main(char argc, char **argv)
+int main(int argc, char **argv)
 {
-	int i = 0;
-	int *stack = NULL;
-	FILE *fp;
+	FILE *file;
+	BUFF_T *buff;
+	stack_t *stack = NULL;
 	char *line = NULL;
 	size_t len = 0;
 	ssize_t read;
 	unsigned int line_number = 0;
 
-	if (argc != 2)
+
+
+	if(argc != 2)
 	{
 		fprintf(stderr, "USAGE: monty file\n");
 		exit(EXIT_FAILURE);
 	}
-	fp = fopen(argv[1], "r");
 
-	while ((read = getline(&line, &len, fp)) != -1)
+
+
+	file = fopen(argv[1], "r");
+
+	while ((read = getline(&line, &len, file)) != -1)	// read line by line
 	{
-
 		line_number++;
-		if (line[0] == '#')
-			continue;
-		if (line[0] == '\n')
-			continue;
-		}
-		printf("%d\t", line_number);
-		printf("%s\n", line);
-		
-		while (*line)
+		buff = read_line(file);
+		if(buff->opcode != NULL)
 		{
-			opcode_lookup(line, &stack, line_number);
-			line++;
+			printf("%s\n", buff->opcode);
+			opcode(&stack, buff->opcode, line_number);
 		}
-		free(line);
-		fclose(fp);
-		return (0);
+		else
+		{
+			printf("L%d: unknown instruction %s\n", line_number, buff->opcode);
+			status = 1;
+		}
+		opcode(&stack, buff->buff, line_number);
+		free(buff->buff);
+		free(buff);
+
+
+	
 	}
 
+	free(line);
+	fclose(file);
+	free_stack(stack);
+	return (status);
 
+}
 
-/*
-*	EXAMPLE: 
-*	>>>$ ./a.out hello there
-*	argv[0]: ./a.out
-*	argv[1]: hello
-*	argv[2]: there
-*/

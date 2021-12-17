@@ -2,140 +2,122 @@
 
 stack_t *add_node_end(stack_t **head, int n)
 {
-	stack_t *new_node;
-	stack_t *temp;
+	stack_t *new = malloc(sizeof(stack_t));
 
-	new_node = malloc(sizeof(stack_t));
-	if (new_node == NULL)
+	if (!new)
 	{
 		fprintf(stderr, "Error: malloc failed\n");
 		exit(EXIT_FAILURE);
 	}
-	new_node->n = n;
-	new_node->next = NULL;
-	if (*head == NULL)
+	new->n = n;
+	new->next = NULL;
+	if (!*head)
 	{
-		new_node->prev = NULL;
-		*head = new_node;
-		return (new_node);
+		new->prev = NULL;
+		*head = new;
+		return (new);
 	}
-	temp = *head;
-	temp->next = new_node;
-
-	new_node->prev = temp;
-
-	return (new_node);
+	new->prev = *head;
+	(*head)->next = new;
+	*head = new;
+	return (new);
 }
 
 
 stack_t *add_node_start(stack_t **head, int n)
 {
-	stack_t *new_node;
-	stack_t *temp;
+	stack_t *new = malloc(sizeof(stack_t));
 
-	new_node = malloc(sizeof(stack_t));
-	if (new_node == NULL)
+	if (!new)
 	{
 		fprintf(stderr, "Error: malloc failed\n");
 		exit(EXIT_FAILURE);
 	}
-	new_node->n = n;
-	new_node->prev = NULL;
-	if (*head == NULL)
+	new->n = n;
+	new->prev = NULL;
+	if (!*head)
 	{
-		new_node->next = NULL;
-		*head = new_node;
-		return (new_node);
+		new->next = NULL;
+		*head = new;
+		return (new);
 	}
-	temp = *head;
-	temp->prev = new_node;
-
-	new_node->next = temp;
-
-	return (new_node);
+	new->next = *head;
+	(*head)->prev = new;
+	*head = new;
+	return (new);
 }
 
 stack_t *add_node_at(stack_t **head, unsigned int n, int value)
 {
-	stack_t *new_node;
-	stack_t *temp;
-	stack_t *temp2;
+	stack_t *new = malloc(sizeof(stack_t));
+	stack_t *current = *head;
 
-	new_node = malloc(sizeof(stack_t));
-	if (new_node == NULL)
+	if (!new)
 	{
 		fprintf(stderr, "Error: malloc failed\n");
 		exit(EXIT_FAILURE);
 	}
-	new_node->n = value;
-	new_node->next = NULL;
-	new_node->prev = NULL;
-	if (*head == NULL)
+	new->n = value;
+	if (!*head)
 	{
-		new_node->next = NULL;
-		*head = new_node;
-		return (new_node);
+		new->next = NULL;
+		new->prev = NULL;
+		*head = new;
+		return (new);
 	}
-	temp = *head;
-	temp2 = *head;
-	while (temp != NULL && n > 0)
+	if (n == 0)
+		return (add_node_start(head, value));
+	if (n == 1)
+		return (add_node_end(head, value));
+	while (current)
 	{
-		temp2 = temp;
-		temp = temp->next;
-		n--;
+		if (n == current->n)
+		{
+			new->next = current->next;
+			new->prev = current;
+			current->next->prev = new;
+			current->next = new;
+			return (new);
+		}
+		current = current->next;
 	}
-	if (temp == NULL)
-	{
-		new_node->next = NULL;
-		temp2->next = new_node;
-		return (new_node);
-	}
-	temp2->next = new_node;
-	new_node->prev = temp2;
-	new_node->next = temp;
-	temp->prev = new_node;
-	return (new_node);
+	return (NULL);
 }
 
 stack_t *add_node_at_end(stack_t **head, unsigned int n, int value)
 {
-	stack_t *new_node;
-	stack_t *temp;
-	stack_t *temp2;
+	stack_t *new = malloc(sizeof(stack_t));
+	stack_t *current = *head;
 
-	new_node = malloc(sizeof(stack_t));
-	if (new_node == NULL)
+	if (!new)
 	{
 		fprintf(stderr, "Error: malloc failed\n");
 		exit(EXIT_FAILURE);
 	}
-	new_node->n = value;
-	new_node->next = NULL;
-	new_node->prev = NULL;
-	if (*head == NULL)
+	new->n = value;
+	if (!*head)
 	{
-		new_node->next = NULL;
-		*head = new_node;
-		return (new_node);
+		new->next = NULL;
+		new->prev = NULL;
+		*head = new;
+		return (new);
 	}
-	temp = *head;
-	temp2 = *head;
-	while (temp != NULL)
+	if (n == 0)
+		return (add_node_start(head, value));
+	if (n == 1)
+		return (add_node_end(head, value));
+	while (current)
 	{
-		temp2 = temp;
-		temp = temp->next;
+		if (!current->next)
+		{
+			new->next = NULL;
+			new->prev = current;
+			current->next = new;
+			return (new);
+		}
+		current = current->next;
 	}
-	if (temp == NULL)
-	{
-		new_node->next = NULL;
-		temp2->next = new_node;
-		return (new_node);
-	}
-	temp2->next = new_node;
-	new_node->prev = temp2;
-	new_node->next = temp;
-	temp->prev = new_node;
-	return (new_node);
+	return (NULL);
 }
 
 
