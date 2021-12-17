@@ -37,5 +37,16 @@ int isnumber(char *str)
 		if (i < '0' || i > '9')
 			return (0);
 
-	return (1);
+	return (1)
 }
+
+
+/**
+ * opcode - function in charge of running builtins
+ * @stack: stack given by main
+ * @str: string to compare
+ * @line_cnt: ammount of lines
+ *
+ * Return: nothing
+ */
+void opcode(stack_t **stack, char *str, unsigned int line_cnt)

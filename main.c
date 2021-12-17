@@ -1,6 +1,5 @@
 #include "monty.h"
 
-int status = 0;
 
 
 
@@ -13,52 +12,36 @@ int status = 0;
  */
 int main(int argc, char **argv)
 {
+
+
 	FILE *file;
-	BUFF_T *buff;
+	size_t buf_len = 0;
+	char *buffer = NULL;
+	char *str = NULL;
 	stack_t *stack = NULL;
-	char *line = NULL;
-	size_t len = 0;
-	ssize_t read;
-	unsigned int line_number = 0;
-
-
-
-	if(argc != 2)
-	{
-		fprintf(stderr, "USAGE: monty file\n");
-		exit(EXIT_FAILURE);
-	}
-
-
+	unsigned int line_cnt = 1;
 
 	file = fopen(argv[1], "r");
 
-	while ((read = getline(&line, &len, file)) != -1)	// read line by line
+
+	while (getline(&buffer, &buf_len, file) != -1)
 	{
-		line_number++;
-		buff = read_line(file);
-		if(buff->opcode != NULL)
+		str = strtok(buffer, "\n\t\r");
+		if (str != NULL)
 		{
-			printf("%s\n", buff->opcode);
-			opcode(&stack, buff->opcode, line_number);
+			execute_opcode(&stack, str, line_cnt);
 		}
-		else
-		{
-			printf("L%d: unknown instruction %s\n", line_number, buff->opcode);
-			status = 1;
-		}
-		opcode(&stack, buff->buff, line_number);
-		free(buff->buff);
-		free(buff);
-
-
-	
+		line_cnt++;
 	}
 
-	free(line);
-	fclose(file);
+	{
+
+		execute_opcode(&stack, str, line_cnt);
+		opcode(&stack, str, line_cnt);
+		line_cnt++;
+	}
+	free(buffer);
 	free_stack(stack);
-	return (status);
-
+	fclose(file);
+	exit(status);
 }
-

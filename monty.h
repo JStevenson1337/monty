@@ -35,6 +35,8 @@ typedef struct BUFFER_S
 } BUFF_T;
 
 
+
+
 /**
  * struct instruction_s - opcode and its function
  * @opcode: the opcode
@@ -49,19 +51,22 @@ typedef struct instruction_s
         void (*f)(stack_t **stack, unsigned int line_number);
 } instruction_t;
 
-/*
- * Custom Functions
- */
-char (*get_op_func(char *s))(stack_t **stack, unsigned int line_number);
-
+extern OP_LIST { \
+	{"push", push},\
+	{"pall", pall},\
+        {"pint", pint},\
+	{"pop", pop},\
+	{"swap", swap},\
+	{"nop", nop},\
+        {"NULL", NULL}\
+}
 
 
 extern int status;
 
-char *opcode(stack_t *stack, char *str, unsigned int line_cnt);
 
-// void push(stack_t **stack, unsigned int line_cnt);
-// void pall(stack_t **stack, unsigned int line_cnt);
+void push(stack_t **stack, unsigned int line_cnt);
+void pall(stack_t **stack, unsigned int line_cnt);
 // void pint(stack_t **stack, unsigned int line_cnt);
 // void swap(stack_t **stack, unsigned int line_cnt);
 // void pop(stack_t **stack, unsigned int line_cnt);
@@ -86,8 +91,4 @@ char *opcode(stack_t *stack, char *str, unsigned int line_cnt);
 // void file_error(char *argv);
 // void error_usage(void);
 
-
-
-buff_t *read_line(FILE *file);
-buff_t *line_cnt(FILE *file);
 #endif
