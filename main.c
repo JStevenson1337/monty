@@ -1,26 +1,5 @@
 #include "monty.h"
 
-/**
- * error_usage - prints usage message and exits
- *
- * Return: nothing
- */
-void error_usage(void)
-{
-	
-}
-
-/**
- * file_error - prints file error message and exits
- * @argv: argv given by manin
- *
- * Return: nothing
- */
-void file_error(char *argv)
-{
-	fprintf(stderr, "Error: Can't open file %s\n", argv);
-	exit(EXIT_FAILURE);
-}
 
 int status = 0;
 /**
@@ -30,17 +9,19 @@ int status = 0;
  *
  * Return: exit status
  */
-int main(int argc, char **argv)
+int main(int __attribute__((unused)) argc, char **argv)
 {
 	FILE *file;
-	size_t buf_len = 0;
 	char *buffer = NULL;
+	size_t buf_len = 0;
 	char *str = NULL;
 	stack_t *stack = NULL;
 	unsigned int line_cnt = 1;
 
 	global.blob = 1;
-	if (argc != 2)
+	
+	
+if (argc != 2)
 		error_usage();
 
 	file = fopen(argv[1], "r");
@@ -48,27 +29,17 @@ int main(int argc, char **argv)
 	if (!file)
 		file_error(argv[1]);
 
-while (fgets(buffer, buf_len, file) != NULL)
-	{
-		if (status)
-			break;
-		if (*buffer == '\n')
+	while (fgetc(file) != EOF)
 		{
+			fseek(file, -1, SEEK_CUR);
+			getline(&buffer, &buf_len, file);
+			str = strtok(buffer, "\n");
+			if (str[0] == '#')
+				continue;
+			if (str[0] == '\0')
+				continue;
+			global.args = strtok(str, " ");
+			opcode(&stack, global.args, line_cnt);
 			line_cnt++;
-			continue;
 		}
-		str = strtok(buffer, " \t\n");
-		if (!str || *str == '#')
-		{
-			line_cnt++;
-			continue;
-		}
-		global.args = strtok(NULL, " \t\n");
-		opcode(&stack, str, line_cnt);
-		line_cnt++;
-	}
-	free(buffer);
-	free_stack(stack);
-	fclose(file);
-	exit(status);
 }

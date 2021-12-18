@@ -90,7 +90,8 @@ stack_t *queue_node(stack_t **stack, const int n);
 void free_stack(stack_t *stack);
 size_t print_stack(const stack_t *stack);
 
-
+void error_usage(void);
+void file_error(char *argv);
 
 
 #endif /* MONTY_H */
