@@ -1,50 +1,14 @@
 #ifndef MONTY_H
 #define MONTY_H
 
-/*
- *Built-in Libraries
- */
+#include <stddef.h>
 #include <stdio.h>
-#include <stdarg.h>
-#include <errno.h>
 #include <stdlib.h>
-#include <readline/readline.h>
-#include <readline/history.h>
-#include <sys/types.h>
-#include <unistd.h>
 #include <string.h>
-
-/*
- * Custom Functions
- */
-		/*
-		 * open_f.c
-		 */
-
-int *open_file(char *file);
-
-		/*
-		 * stack_f.c
-		 */
-
-// stack_t *add_node_end(stack_t **head, int n);
-// stack_t *add_node_start(stack_t **head, int n);
-// stack_t *add_node_at(stack_t **head, unsigned int n, int value);
-// stack_t *add_node_at_end(stack_t **head, unsigned int n, int value);
-
-
-
-/**
- * struct BUFFER_S
- * @i: counter
- * @buff: stores the sizeof buff
- */
-typedef struct BUFFER_S
-{
-	unsigned char buff[BUFSIZ];
-	int i;
-} BUFF_T;
-
+#include <unistd.h>
+#include <readline/readline.h>
+#include <stdarg.h>
+#include <ctype.h>
 /**
  * struct stack_s - doubly linked list representation of a stack (or queue)
  * @n: integer
@@ -52,15 +16,14 @@ typedef struct BUFFER_S
  * @next: points to the next element of the stack (or queue)
  *
  * Description: doubly linked list node structure
- * for stack, queues, LIFO, FIFO
+ * for stack, queues, LIFO, FIFO Holberton project
  */
 typedef struct stack_s
 {
-        int n;
-        struct stack_s *prev;
-        struct stack_s *next;
+	int n;
+	struct stack_s *prev;
+	struct stack_s *next;
 } stack_t;
-
 
 /**
  * struct instruction_s - opcode and its function
@@ -68,16 +31,60 @@ typedef struct stack_s
  * @f: function to handle the opcode
  *
  * Description: opcode and its function
- * for stack, queues, LIFO, FIFO
+ * for stack, queues, LIFO, FIFO Holberton project
  */
 typedef struct instruction_s
 {
-        char *opcode;
-        void (*f)(stack_t **stack, unsigned int line_number);
+	char *opcode;
+	void (*f)(stack_t **stack, unsigned int line_number);
 } instruction_t;
 
-void opcode_lookup(char *line, int **stack, unsigned int line_number);
-char push(stack_t **head, unsigned int line_number);
-int pall(stack_t **stack, unsigned int line_number);
+#define op_check { \
+		{"push", push},\
+		{"pall", pall},\
+		{"pint", pint},\
+		{"pop", pop},\
+		{"swap", swap},\
+		{"add", add},\
+		{"nop", nop},\
+		};
 
-#endif
+		/*
+		* TODO: Add more opcodes here
+		*/
+	
+/**
+* struct op_t - args for the current opcode
+* @blob: stack mode, stack (default) and queue
+* @args: the args of the string
+*
+* Description: global structure used to pass data around the functions easily
+*/
+typedef struct op_t
+{
+	int blob;
+	char *args;
+} op_t;
+op_t global;
+
+extern int status;
+
+void opcode(stack_t **stack, char *str, unsigned int line_cnt);
+
+void push(stack_t **stack, unsigned int line_cnt);
+void pall(stack_t **stack, unsigned int line_cnt);
+void pint(stack_t **stack, unsigned int line_cnt);
+void swap(stack_t **stack, unsigned int line_cnt);
+void pop(stack_t **stack, unsigned int line_cnt);
+void nop(stack_t **stack, unsigned int line_cnt);
+void add(stack_t **stack, unsigned int line_cnt);
+/*
+ *TODO: Add more opcodes here
+ */
+
+
+
+
+
+
+#endif /* MONTY_H */

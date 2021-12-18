@@ -1,55 +1,74 @@
 #include "monty.h"
+
 /**
- * main - main function
- * @argc: number of arguments
- * @argv: arguments
- * Return: 0
+ * error_usage - prints usage message and exits
+ *
+ * Return: nothing
  */
-int main(char argc, char **argv)
+void error_usage(void)
 {
-	int i = 0;
-	int *stack = NULL;
-	FILE *fp;
-	char *line = NULL;
-	size_t len = 0;
-	ssize_t read;
-	unsigned int line_number = 0;
+	
+}
 
+/**
+ * file_error - prints file error message and exits
+ * @argv: argv given by manin
+ *
+ * Return: nothing
+ */
+void file_error(char *argv)
+{
+	fprintf(stderr, "Error: Can't open file %s\n", argv);
+	exit(EXIT_FAILURE);
+}
+
+int status = 0;
+/**
+ * main - entry point
+ * @argv: list of args
+ * @argc: num of args
+ *
+ * Return: exit status
+ */
+int main(int argc, char **argv)
+{
+	FILE *file;
+	size_t buf_len = 0;
+	char *buffer = NULL;
+	char *str = NULL;
+	stack_t *stack = NULL;
+	unsigned int line_cnt = 1;
+
+	global.blob = 1;
 	if (argc != 2)
-	{
-		fprintf(stderr, "USAGE: monty file\n");
-		exit(EXIT_FAILURE);
-	}
-	fp = fopen(argv[1], "r");
+		error_usage();
 
-	while ((read = getline(&line, &len, fp)) != -1)
-	{
+	file = fopen(argv[1], "r");
 
-		line_number++;
-		if (line[0] == '#')
-			continue;
-		if (line[0] == '\n')
-			continue;
-		}
-		printf("%d\t", line_number);
-		printf("%s\n", line);
-		
-		while (*line)
+	if (!file)
+		file_error(argv[1]);
+
+while (fgets(buffer, buf_len, file) != NULL)
+	{
+		if (status)
+			break;
+		if (*buffer == '\n')
 		{
-			opcode_lookup(line, &stack, line_number);
-			line++;
+			line_cnt++;
+			continue;
 		}
-		free(line);
-		fclose(fp);
-		return (0);
+		str = strtok(buffer, " \t\n");
+		if (!str || *str == '#')
+		{
+			line_cnt++;
+			continue;
+		}
+		global.args = strtok(NULL, " \t\n");
+		opcode(&stack, str, line_cnt);
+		line_cnt++;
 	}
-
-
-
-/*
-*	EXAMPLE: 
-*	>>>$ ./a.out hello there
-*	argv[0]: ./a.out
-*	argv[1]: hello
-*	argv[2]: there
-*/
+	free(buffer);
+	free_stack(stack);
+	fclose(file);
+	exit(status);
+}
