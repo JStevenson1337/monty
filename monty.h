@@ -54,18 +54,18 @@ typedef struct instruction_s
 		*/
 	
 /**
-* struct op_t - args for the current opcode
+* struct help - args for the current opcode
 * @blob: stack mode, stack (default) and queue
 * @args: the args of the string
 *
 * Description: global structure used to pass data around the functions easily
 */
-typedef struct op_t
+typedef struct help
 {
 	int blob;
 	char *args;
-} op_t;
-op_t global;
+} help;
+help global;
 
 extern int status;
 
@@ -82,7 +82,13 @@ void add(stack_t **stack, unsigned int line_cnt);
  *TODO: Add more opcodes here
  */
 
+int is_digit(char *string);
+int isnumber(char *str);
 
+stack_t *add_node(stack_t **stack, const int n);
+stack_t *queue_node(stack_t **stack, const int n);
+void free_stack(stack_t *stack);
+size_t print_stack(const stack_t *stack);
 
 
 
