@@ -1,6 +1,6 @@
 #ifndef MONTY_H
 #define MONTY_H
-
+#define _GNU_SOURCE
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -68,7 +68,6 @@ typedef struct help
 help global;
 
 extern int status;
-
 void opcode(stack_t **stack, char *str, unsigned int line_cnt);
 
 void push(stack_t **stack, unsigned int line_cnt);

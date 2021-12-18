@@ -18,6 +18,7 @@ int main(int __attribute__((unused)) argc, char **argv)
 	stack_t *stack = NULL;
 	unsigned int line_cnt = 1;
 
+
 	global.blob = 1;
 	
 	
@@ -29,17 +30,27 @@ if (argc != 2)
 	if (!file)
 		file_error(argv[1]);
 
-	while (fgetc(file) != EOF)
+	while (getline(&buffer, &buf_len, file) != -1)
+	{
+		if (status)
+			break;
+		if (*buffer == '\n')
 		{
-			fseek(file, -1, SEEK_CUR);
-			getline(&buffer, &buf_len, file);
-			str = strtok(buffer, "\n");
-			if (str[0] == '#')
-				continue;
-			if (str[0] == '\0')
-				continue;
-			global.args = strtok(str, " ");
-			opcode(&stack, global.args, line_cnt);
 			line_cnt++;
+			continue;
 		}
+		str = strtok(buffer, " \t\n");
+		if (!str || *str == '#')
+		{
+			line_cnt++;
+			continue;
+		}
+		global.args = strtok(NULL, " \t\n");
+		opcode(&stack, str, line_cnt);
+		line_cnt++;
+	}
+	free(buffer);
+	free_stack(stack);
+	fclose(file);
+	exit(status);
 }
