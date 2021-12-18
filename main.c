@@ -9,7 +9,7 @@ int status = 0;
  *
  * Return: exit status
  */
-int main(int __attribute__((unused)) argc, char **argv)
+int main(int argc, char **argv)
 {
 	FILE *file;
 	char *buffer = NULL;
